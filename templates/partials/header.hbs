@@ -1,0 +1,10 @@
+{{! This contains the header that we gonna show in all of the pages thoroughout our site. What goes inside this is not a complete html document, instead it is just a part of the webpage }}
+
+<header>
+  <a href='/'>Home</a>
+  <a href='/about'>About</a>
+  <a href='/help'>Help</a>
+  <h1>{{title}}</h1>
+</header>
+
+{{!-- We can now use this partial inside the other hbs files. For that we render the partial in these files by writing {{>header}} --}}

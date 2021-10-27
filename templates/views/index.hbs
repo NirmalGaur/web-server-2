@@ -1,0 +1,27 @@
+{{! A handlebars file is nothing more that html with a couple of features for injecting dynamic values }}
+
+<html>
+  <head>
+    <title>Weather</title>
+    <link rel='icon' href='/img/icon.png'>
+    <link rel='stylesheet' href='/css/styles.css' />
+  </head>
+
+  <body>
+    <div class="main-content">
+      {{>header}}
+
+      <form>
+        <input placeholder="Location">
+        <button>Search</button>
+      </form>
+
+      <p id="message-1"></p>
+      <p id="message-2"></p>
+    </div>  
+    {{!-- Using flexbox in css, we're gonna have this div take up all the space available accept what the footer needs. That will push the footer to the bottom of the page --}}
+
+    {{>footer}}
+    <script src='/js/app.js'></script>
+  </body>
+</html>
