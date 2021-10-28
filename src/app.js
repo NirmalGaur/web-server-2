@@ -3,10 +3,10 @@
 // using express we also able to serve up json data that allow us to get the location from the user, convert it into a forecast, and send the forecast back to the browser to have it rendered to the screen.
 // instead of serving up a website, we can also serve up a http json based API (similar to mapbox API).
 
-const path = require('path');
-const express = require('express');
-const hbs = require('hbs');
-const { get } = require('http');
+const path = require("path");
+const express = require("express");
+const hbs = require("hbs");
+const { get } = require("http");
 
 // SHOW: console.log(__dirname); // gives the path of the current directory
 // SHOW: console.log(__filename); // gives the path of the current file
@@ -16,22 +16,24 @@ const { get } = require('http');
 // express library exposes a single function: express, and we call it CREATE A NEW EXPRESS application:
 const app = express(); // we configure our server by using various methods provided on the express application itself
 
-const publicDirectoryPath = path.join(__dirname, '../public'); //path to the public directory
+const port = process.env.PORT || 3000;
 
-const viewsPath = path.join(__dirname, '../templates/views'); //path to the directory we want to be the views directory
+const publicDirectoryPath = path.join(__dirname, "../public"); //path to the public directory
+
+const viewsPath = path.join(__dirname, "../templates/views"); //path to the directory we want to be the views directory
 
 // PARTIALS allows us to create a template which is part of a bigger webpage. With partials, we can create part of the webpage we end up reusing across multiple pages across the site (like headers and footers), without copying the markup b/w all the pages
-const partialsPath = path.join(__dirname, '../templates/partials');
+const partialsPath = path.join(__dirname, "../templates/partials");
 
 // We use $_template engine to render the dynamic web-pages using express. The template that we are gonna setup is called HANDLEBARS which allows the rendering the dynamic pages, it also allows us to create code that we can reuse (to share) across different pages.
 // To integrate handlebars with express, we will use hbs npm library: 'npm i hbs@4.0.1'
 
 // Once installed, all we need TO TELL EXPRESS WHICH TEMPLATE ENGINE WE INSTALL, we do that by using app.set
-app.set('view engine', 'hbs'); //first argument is the setting name, and second is setting value
+app.set("view engine", "hbs"); //first argument is the setting name, and second is setting value
 // while working with express, it expects all the handlebars templates to live in a specific folder called views in the root of the project
 
 //We can costumise views directory (that means we don't always have to name it 'view' or we can change its location to some nested directory):
-app.set('views', viewsPath); //To tell express which directory we set as the views directory
+app.set("views", viewsPath); //To tell express which directory we set as the views directory
 
 //Now we can tell hbs in which directory our partials are:
 hbs.registerPartials(partialsPath);
@@ -42,26 +44,26 @@ hbs.registerPartials(partialsPath);
 app.use(express.static(publicDirectoryPath));
 
 //To actually serve up the template created in the views directory, we need to set up a route:
-app.get('', (req, res) => {
-  res.render('index', {
-    title: 'Weather App!',
-    name: 'Nirmal Gaur',
+app.get("", (req, res) => {
+  res.render("index", {
+    title: "Weather App!",
+    name: "Nirmal Gaur",
   }); //render allows us to render one of our view whose name is passed in res.render()
   // second arg to res.render is an object which contains all of the values we want the view to access
 }); //So by calling res.render(), express goes of to get the specified view, it then convertes it into html
 
-app.get('/about', (req, res) => {
-  res.render('about', {
-    title: 'About',
-    name: 'Nirmal Gaur',
+app.get("/about", (req, res) => {
+  res.render("about", {
+    title: "About",
+    name: "Nirmal Gaur",
   });
 });
 
-app.get('/help', (req, res) => {
-  res.render('help', {
-    helpText: 'Some helpful text here...',
-    title: 'Help',
-    name: 'Nirmal Gaur',
+app.get("/help", (req, res) => {
+  res.render("help", {
+    helpText: "Some helpful text here...",
+    title: "Help",
+    name: "Nirmal Gaur",
   });
 });
 
@@ -96,12 +98,12 @@ app.get('/about', (req, res) => {
 // What we need now is for the browser to be able to communicates with the server, passinga an address along. Then the server needs to convert that address into a forecast and pass it back to the browser so the browser can render the forecast data to the screen.
 // To send the address from the browser, we will use the query string as a part of the url (provided at the end of url starting with ?) and then the server will read the query string value to get the address information.
 // Information passed from the browser is now available inside the express route handler. Information about the query string lives in req.
-app.get('/products', (req, res) => {
+app.get("/products", (req, res) => {
   // req.query contains all of the query strings information. If there is a query string 'search=game' then req.query.search will give us the value that is 'game'
   if (!req.query.search) {
     return res.send({
       //http request have a single request and single response, hence we return right here
-      error: 'You must provide a search term',
+      error: "You must provide a search term",
     });
   }
   res.send({
@@ -111,15 +113,15 @@ app.get('/products', (req, res) => {
 
 // To provide a json, we can send the object or an array. Now when we visit this page, we get a json response back (res), express detects the object and automically stringify the json for us
 //Now to use the weather app in here, we have to first install 'npm i request@2.88.0
-app.get('/weather', (req, res) => {
+app.get("/weather", (req, res) => {
   if (!req.query.address) {
     return res.send({
-      error: 'Address must be provided',
+      error: "Address must be provided",
     });
   }
   // Using geocode and forecast from weather app:
-  const geocode = require('./utility/geocode');
-  const forecast = require('./utility/forecast');
+  const geocode = require("./utility/geocode");
+  const forecast = require("./utility/forecast");
   const location = req.query.address;
   geocode(location, (error, { latitude, longitude, location } = {}) => {
     if (error) {
@@ -143,22 +145,22 @@ app.get('/weather', (req, res) => {
   });
 });
 
-app.get('/help/*', (req, res) => {
+app.get("/help/*", (req, res) => {
   //This is going to match any page that hasn't been matched and starts with /help/
-  res.render('404', {
-    message: 'Help article not found.',
-    title: '404',
-    name: 'Nirmal Gaur',
+  res.render("404", {
+    message: "Help article not found.",
+    title: "404",
+    name: "Nirmal Gaur",
   });
 });
 
 // Setting up 404 PAGES:
-app.get('*', (req, res) => {
+app.get("*", (req, res) => {
   // To match everything else, express provides a wildcard character '*'
-  res.render('404', {
-    message: 'Page not found.',
-    title: '404',
-    name: 'Nirmal Gaur',
+  res.render("404", {
+    message: "Page not found.",
+    title: "404",
+    name: "Nirmal Gaur",
   });
 });
 
@@ -166,8 +168,8 @@ app.get('*', (req, res) => {
 // If there is match, then it checks in the views directory for the file with same name as we provided in the first agrument of res.render(), and then render that hbs file accordingly
 
 // Now to START UP THE SERVER, we use the method app.listen
-app.listen(3000, () => {
-  console.log('Server is up on port 3000!');
+app.listen(port, () => {
+  console.log(`Server is up on port ${port}`);
 }); // 3000 is a common development port, another optional argument is the callback function that can be passed when the server is up and running (process of starting-up a server is async)
 
 // Now we can start-up the server by writing node src/app.js
